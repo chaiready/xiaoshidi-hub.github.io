@@ -478,8 +478,32 @@
 <h2 id="电源模块设计"><a href="#电源模块设计" class="headerlink" title="电源模块设计"></a><center>电源模块设计</center></h2><p>本设计采用锂电池供电, 模块的供电电压一般都为5V，同时超声波模块需要较大的电流才能正常工作，所以在降压的基础上也要保证足够大的输出电流。本设计采用可调输出版本，模块的输入电压范围广，输出电压在1.25V-35V内可调，电压转换效率高，输出纹波小。降压电路如下所示：</p>
 <p><img src="http://q44yjzgew.bkt.clouddn.com/2.png" alt="电源管理电路"></p>
 <h2 id="电机驱动模块设计"><a href="#电机驱动模块设计" class="headerlink" title="电机驱动模块设计"></a><center>电机驱动模块设计</center></h2><p>要完成转向是能够利用单片机实现的，然而单片机I0的带负载能力弱，因此我们选择了大功率放大器件TB6612FNG。TB6612FNG是采用MOSFET-H桥结构的双通道大电流电路输出，可以控制2个电机的驱动。相比普通的电机驱动，外围电路非常简单，只需要一个芯片和一个钽电容进行PWM输出滤波，系统尺寸小。PWM信号输入频率范围广，轻松满足本设计的需求。   </p>
-<h3 id="电源驱动引脚表"><a href="#电源驱动引脚表" class="headerlink" title="电源驱动引脚表"></a>电源驱动引脚表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">控制芯片:TB6612</span><br><span class="line">控制芯片数量:2</span><br><span class="line">    1号TB6612引脚分配：</span><br><span class="line">     VM         PWMA---------&gt;TIM1_CH1(PA8)</span><br><span class="line">     VCC        AIN2---------&gt;GPIOB_12</span><br><span class="line">     GND        AIN1---------&gt;GPIOB_13</span><br><span class="line">     AO1        STBY---------&gt;GPIOB_14</span><br><span class="line">     AO2        BIN1---------&gt;GPIOB_15</span><br><span class="line">     BO2        BIN2---------&gt;GPIOA_12</span><br><span class="line">     BO1        PWMB---------&gt;TIM1_CH2(PA9)</span><br><span class="line">     GND        GND</span><br><span class="line">    2号TB6612引脚分配：</span><br><span class="line">     VM         PWMA---------&gt;TIM1_CH3(PA10)</span><br><span class="line">     VCC        AIN2---------&gt;GPIOB_5</span><br><span class="line">     GND        AIN1---------&gt;GPIOB_6</span><br><span class="line">     AO1        STBY---------&gt;GPIOB_7</span><br><span class="line">     AO2        BIN1---------&gt;GPIOB_8</span><br><span class="line">     BO2        BIN2---------&gt;GPIOA_9</span><br><span class="line">     BO1        PWMB---------&gt;TIM1_CH4(PA11)</span><br><span class="line">     GND        GND</span><br><span class="line">真值表</span><br><span class="line">     AIN1   0     1     0     1</span><br><span class="line">     AIN2   0     0     1     1</span><br><span class="line">     BIN1   0     1     0     1</span><br><span class="line">     BIN2   0     0     1     1</span><br><span class="line">           停止  正转  反转  刹车</span><br></pre></td></tr></table></figure>
-<p><img src="http://q44yjzgew.bkt.clouddn.com/3.png" alt="电源驱动芯片"></p>
+<h3 id="电源驱动引脚表"><a href="#电源驱动引脚表" class="headerlink" title="电源驱动引脚表"></a>电源驱动引脚表</h3><pre><code>控制芯片:TB6612
+控制芯片数量:2
+    1号TB6612引脚分配：
+     VM         PWMA---------&gt;TIM1_CH1(PA8)
+     VCC        AIN2---------&gt;GPIOB_12
+     GND        AIN1---------&gt;GPIOB_13
+     AO1        STBY---------&gt;GPIOB_14
+     AO2        BIN1---------&gt;GPIOB_15
+     BO2        BIN2---------&gt;GPIOA_12
+     BO1        PWMB---------&gt;TIM1_CH2(PA9)
+     GND        GND
+    2号TB6612引脚分配：
+     VM         PWMA---------&gt;TIM1_CH3(PA10)
+     VCC        AIN2---------&gt;GPIOB_5
+     GND        AIN1---------&gt;GPIOB_6
+     AO1        STBY---------&gt;GPIOB_7
+     AO2        BIN1---------&gt;GPIOB_8
+     BO2        BIN2---------&gt;GPIOA_9
+     BO1        PWMB---------&gt;TIM1_CH4(PA11)
+     GND        GND
+真值表
+     AIN1   0     1     0     1
+     AIN2   0     0     1     1
+     BIN1   0     1     0     1
+     BIN2   0     0     1     1
+           停止  正转  反转  刹车</code></pre><p><img src="http://q44yjzgew.bkt.clouddn.com/3.png" alt="电源驱动芯片"></p>
 <h2 id="超声波模块"><a href="#超声波模块" class="headerlink" title="超声波模块"></a><center>超声波模块</center></h2><p>采用HC-SR04超声波模块，该芯片具有较高的集成度以及良好的稳定性，测度距离十分精确，十分稳定。供电电压为DC5V供电电流小于10mA，探测距离为0.010m-3.5m一共有四个引脚VCC(DC5V)、Triger（发射端）、Echo（接收端）、GND（地）。HC-SR04实物图如下：</p>
 <p><img src="http://q44yjzgew.bkt.clouddn.com/4.png" alt="超声波实物"></p>
 <p>该模块是利用单片机的IO触发电平测距，单片机内部利用普通定时器产生一个高电平信号之后，超声波就可以自主发送频率为40khz的方波，然后等待信号的返回；若有信号返回，单片机IO口就立刻输出一高电平，利用高电平产生的时间可以计算小车与障碍物的距离。最终距离就是高电平持续时间乘以声音在空气中传播的速度再除以2，可以反复测量距离。<br>在程序开始首先初始化超声波，利用定时器并设置时基的自动重装载初值1000，psc为预分频值72，这样的话我们产生一次中断的时间是1ms，并设置抢占优先级0，子优先级3。HC_SR04_Echo引脚接收到高电平，打开定时器，且每1ms进入一次中断。在测量时首先让Trig发送一个大于10us的高电平，然后拉高HC_SR04_Trig，当Echo为0时打开定时器计时，当Echo为1时关闭定时器，通过公式计算距离。<br>模块工作原理：<br>(1)单片机触发引脚，输出高电平信号；<br>(2)模块发送端自动发送特定频率的方波；<br>(3)如果有信号返回，通过IO输出一高电平，高电平持续的时间就是超声波的发射时长；<br>(4)测试距离=(高电平时间*声速(340M/S))/2。<br>注意：在硬件操作上需要首先让模块地端先连接，否则会影响模块工作。测距时，被测物体的摆放不能太过于杂乱，否则会影响测试结果。</p>
