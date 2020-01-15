@@ -457,7 +457,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3k
+                    3.6k
                 </div>
                 
 
@@ -504,7 +504,91 @@
      AIN2   0     0     1     1
      BIN1   0     1     0     1
      BIN2   0     0     1     1
-           停止  正转  反转  刹车</code></pre><h2 id="超声波模块"><a href="#超声波模块" class="headerlink" title="超声波模块"></a><center>超声波模块</center></h2><p>采用HC-SR04超声波模块，该芯片具有较高的集成度以及良好的稳定性，测度距离十分精确，十分稳定。供电电压为DC5V供电电流小于10mA，探测距离为0.010m-3.5m一共有四个引脚VCC(DC5V)、Triger（发射端）、Echo（接收端）、GND（地）。HC-SR04实物图如下：</p>
+           停止  正转  反转  刹车</code></pre><h3 id="电机所用到的定时器配置"><a href="#电机所用到的定时器配置" class="headerlink" title="电机所用到的定时器配置"></a>电机所用到的定时器配置</h3><pre><code>//初始化TIMX,设置TIMx的ARR,PSC
+//arr：自动重装载初值，psc为预分频值，两者配合控制定时器时钟的周期
+//定时器选择TIM1
+static void TB6612_ADVANCE_TIM1_Mode_Config(TIM_TypeDef* TIMx,uint16_t arr,uint16_t psc,uint16_t duty)
+ {
+     //-----------------时基结构体初始化-------------------------/
+     TIM_TimeBaseInitTypeDef TIM_TimeStructure;
+     /*开启定时器1时钟，即内部时钟CK_INT=72M*/
+     RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1,ENABLE);
+    TIM_DeInit(TIMx);
+    /*内部时钟作为计数器时钟，72MHZ*/
+    TIM_InternalClockConfig(TIMx);
+    /*自动重装载寄存器的值，累计TIM_Period+1个频率后产生一个更新或者中断*/
+    TIM_TimeStructure.TIM_Period=arr;
+    /*时钟预分频系数为71，则驱动计数器的时钟CK_CNT=CK_INT/(71+1)=1MHZ*/
+    TIM_TimeStructure.TIM_Prescaler=psc-1;
+    /*设置时钟分割，TIM_CKD_DIV1=0，PWM波不延时*/
+    TIM_TimeStructure.TIM_ClockDivision=TIM_CKD_DIV1;
+    /*向上计数模式*/
+    TIM_TimeStructure.TIM_CounterMode=TIM_CounterMode_Up;
+    /*重复计数器*/
+    TIM_TimeStructure.TIM_RepetitionCounter=0;
+    /*初始化定时器*/
+    TIM_TimeBaseInit(TIMx,&amp;TIM_TimeStructure);
+    /*使能ARR预装载寄存器(影子寄存器)*/
+    TIM_ARRPreloadConfig(TIMx,ENABLE);
+    //-----------------输出比较结构体初始化-----------------------/
+    TIM_OCInitTypeDef   TIM_OCInitStructure;
+    /*PWM模式设置，设置为PWM模式1*/
+    TIM_OCInitStructure.TIM_OCMode=TIM_OCMode_PWM1;
+    /*PWM输出使能相应的IO口输出信号*/
+    TIM_OCInitStructure.TIM_OutputState=TIM_OutputState_Enable;
+    /*设置占空比大小,CCR1[15:0]: 捕获/比较通道1的值,若CC1通道配置为输出：CCR1包含了装入当前捕获/比较1寄存器的值(预装载值)。*/
+    TIM_OCInitStructure.TIM_Pulse=duty;
+    /*输出通道电平极性设置*/
+    TIM_OCInitStructure.TIM_OCPolarity=TIM_OCPolarity_High;
+    /*初始化输出比较参数*/
+    TIM_OC1Init(TIMx,&amp;TIM_OCInitStructure);//初始化TIM1 通道1
+    TIM_OC2Init(TIMx,&amp;TIM_OCInitStructure);//初始化TIM1 通道2
+    TIM_OC3Init(TIMx,&amp;TIM_OCInitStructure);//初始化TIM1 通道3
+    TIM_OC4Init(TIMx,&amp;TIM_OCInitStructure);//初始化TIM1 通道4
+    /*自动重装载*/
+    TIM_OC1PreloadConfig(TIMx,TIM_OCPreload_Enable);
+    TIM_OC2PreloadConfig(TIMx,TIM_OCPreload_Enable);
+    TIM_OC3PreloadConfig(TIMx,TIM_OCPreload_Enable);
+    TIM_OC4PreloadConfig(TIMx,TIM_OCPreload_Enable);
+    /*使能计数器*/
+    TIM_Cmd(TIMx,ENABLE);
+    /*主输出使能,如果设置了相应的使能位(TIMx_CCER寄存器的CCxE、CCxNE位)，则开启OC和OCN输出。*/
+    TIM_CtrlPWMOutputs(TIMx,ENABLE);    
+}
+//高级定时器输出通道初始化函数
+static void TB6612_ADVANCE_TIM_Gpio_Config()
+{
+    GPIO_InitTypeDef  GPIO_InitStruct;
+    /*----------通道1配置--------------*/
+    /*定时器1输出比较通道*/
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
+    /*配置为复用推挽输出*/
+    GPIO_InitStruct.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStruct.GPIO_Pin=GPIO_Pin_8;
+    GPIO_InitStruct.GPIO_Speed=GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA,&amp;GPIO_InitStruct);
+    /*-----------通道二配置-------------*/
+    /*定时器1输出比较通道*/
+    /*配置为复用推挽输出*/
+    GPIO_InitStruct.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStruct.GPIO_Pin=GPIO_Pin_11;
+    GPIO_InitStruct.GPIO_Speed=GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA,&amp;GPIO_InitStruct);
+     /*-----------通道三配置-------------*/
+    /*定时器1输出比较通道*/
+    /*配置为复用推挽输出*/
+    GPIO_InitStruct.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStruct.GPIO_Pin=GPIO_Pin_9;
+    GPIO_InitStruct.GPIO_Speed=GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA,&amp;GPIO_InitStruct);
+     /*-----------通道四配置-------------*/
+    /*定时器1输出比较通道*/
+    /*配置为复用推挽输出*/
+    GPIO_InitStruct.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStruct.GPIO_Pin=GPIO_Pin_10;
+    GPIO_InitStruct.GPIO_Speed=GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA,&amp;GPIO_InitStruct);
+}</code></pre><h2 id="超声波模块"><a href="#超声波模块" class="headerlink" title="超声波模块"></a><center>超声波模块</center></h2><p>采用HC-SR04超声波模块，该芯片具有较高的集成度以及良好的稳定性，测度距离十分精确，十分稳定。供电电压为DC5V供电电流小于10mA，探测距离为0.010m-3.5m一共有四个引脚VCC(DC5V)、Triger（发射端）、Echo（接收端）、GND（地）。HC-SR04实物图如下：</p>
 <p><img src="http://q44yjzgew.bkt.clouddn.com/4.png" alt="超声波实物"></p>
 <p>该模块是利用单片机的IO触发电平测距，单片机内部利用普通定时器产生一个高电平信号之后，超声波就可以自主发送频率为40khz的方波，然后等待信号的返回；若有信号返回，单片机IO口就立刻输出一高电平，利用高电平产生的时间可以计算小车与障碍物的距离。最终距离就是高电平持续时间乘以声音在空气中传播的速度再除以2，可以反复测量距离。<br>在程序开始首先初始化超声波，利用定时器并设置时基的自动重装载初值1000，psc为预分频值72，这样的话我们产生一次中断的时间是1ms，并设置抢占优先级0，子优先级3。HC_SR04_Echo引脚接收到高电平，打开定时器，且每1ms进入一次中断。在测量时首先让Trig发送一个大于10us的高电平，然后拉高HC_SR04_Trig，当Echo为0时打开定时器计时，当Echo为1时关闭定时器，通过公式计算距离。<br>模块工作原理：<br>(1)单片机触发引脚，输出高电平信号；<br>(2)模块发送端自动发送特定频率的方波；<br>(3)如果有信号返回，通过IO输出一高电平，高电平持续的时间就是超声波的发射时长；<br>(4)测试距离=(高电平时间*声速(340M/S))/2。<br>注意：在硬件操作上需要首先让模块地端先连接，否则会影响模块工作。测距时，被测物体的摆放不能太过于杂乱，否则会影响测试结果。</p>
 <p><img src="http://q44yjzgew.bkt.clouddn.com/5.png" alt=""></p>
@@ -1085,7 +1169,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">3k</span>&nbsp;字
+                class="white-color">3.7k</span>&nbsp;字
             
             
             
