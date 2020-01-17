@@ -1227,7 +1227,7 @@ void SERVO_Angle_Control(uint16_t Compare2)
 
         var selection = window.getSelection();
         // if the selection is short let's not annoy our users.
-        if (('' + selection).length < Number.parseInt('120')) {
+        if (('' + selection).length < Number.parseInt('50')) {
             return;
         }
 
