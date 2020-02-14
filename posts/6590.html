@@ -486,7 +486,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/cover11.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -673,15 +673,15 @@
                 <h2 id="一-、模块简介"><a href="#一-、模块简介" class="headerlink" title="一 、模块简介"></a>一 、模块简介</h2><p>嵌入式蓝牙串口通讯模块（简称蓝牙模块）具有两种工作模式：<br>命令响应工作模式和自动连接工作模式。</p>
 <p>当模块处于命令响应工作模式（或者AT模式）时能才能执行 AT 命令，用户可向模块发送各种 AT指令，为模块设定控制参数或发布控制命令。（AT指令就是我们PC与一些终端设备（例如蓝牙，WiFi模块）之间进行通信的，配置这些终端设备参数的一套指令。）<br>在自动连接工作模式下模块又可分为主（Master）、从（Slave）和回环（Loopback）三种工作角色。当模块处于自动连接工作模式时，将自动根据事先设定的方式连接的数据传输。主模式：该模块可以主动搜索并连接其它蓝牙模块并接收发送数据。从模式：只能被搜索被其它蓝牙模块连接进行接收发送数据。回环：蓝牙模块就是将接收的数据原样返回给远程的主设备。</p>
 <h2 id="二、开发工具"><a href="#二、开发工具" class="headerlink" title="二、开发工具"></a>二、开发工具</h2><p>1.USB转TTL模块（可用CH340），蓝牙模块(HC-05)，PC端串口助助手。</p>
-<p>2.蓝牙模块与USB转TTL模块的接线情况就是VCC-VCC，GND-GND，RXD-TXD,TXD-RXD，有的蓝牙模块只有四个引脚，而且我们见到的大多数蓝牙模块都是四个或者只需要用到四个引脚。<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://mmbiz.qpic.cn/mmbiz_png/92RTr9Ut6fHzl0Zr8dmbTz7wYsWRERXKsSExuZ0bZNf27KfJnqVvchvw51jJRMbicgMlMVRbPqicEVrqKGARJugQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt=""></p>
+<p>2.蓝牙模块与USB转TTL模块的接线情况就是VCC-VCC，GND-GND，RXD-TXD,TXD-RXD，有的蓝牙模块只有四个引脚，而且我们见到的大多数蓝牙模块都是四个或者只需要用到四个引脚。<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la1.jpg" alt=""></p>
 <p>3.手机需要安装一个可以进行蓝牙通信的APP，一般直接在你手机的应用商店搜蓝牙串口就可以下载相关APP，如“串口调试助手”。</p>
 <h2 id="三、蓝牙模块初始化"><a href="#三、蓝牙模块初始化" class="headerlink" title="三、蓝牙模块初始化"></a>三、蓝牙模块初始化</h2><p>这里以蓝牙模块HC-05为例，蓝牙模块可能每个人买到的不一样，但是用法都相近，可以作为参考，建议你在哪里买的模块就找对应的卖家找到对应的蓝牙模块中文数据手册，一般来说里面都有对应的AT指令集。这里要注意的是如果你发送对应的指令，在硬件连接都正确的情况下如果串口调试助手不能得到回应，那么很可能是你的AT指令集是错的，因为不同的蓝牙模块对应的蓝牙AT指令集是有差别的。</p>
-<p>HC-05蓝牙模块引脚说明：<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://mmbiz.qpic.cn/mmbiz_png/92RTr9Ut6fHzl0Zr8dmbTz7wYsWRERXKULHqtbEDyvu4CQ00JPax9ReNnkNbcu7l6EErCMaxyEiaobFMQX4Vn2A/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt=""></p>
+<p>HC-05蓝牙模块引脚说明：<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la2.jpg" alt=""></p>
 <p>蓝牙模块自带一个状态指示灯</p>
 <p>1.在上电时，将KEY脚悬空或接地，红灯1s一次快速闪烁，表示进入可配对模式。</p>
 <p>2.在上电之前，按住黑色小设置按钮不放，同时KEY接高电平，上电，灯2s一次慢速闪烁，表示进入AT模式，进入AT模式可以对蓝牙模块进行设置。</p>
 <p>3.配对成功模式，快速闪烁。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://mmbiz.qpic.cn/mmbiz_png/92RTr9Ut6fHzl0Zr8dmbTz7wYsWRERXK98VMiay6ZFVXBq7lH4qaXddY8uSEPYSCuvFR7Cmmo9WpRGr0SxkG1ibg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la3.jpg" alt=""></p>
 <p>这三点很重要，蓝牙模块只有进入了AT模式才能发送AT指令集，很多小白以为只要接上USB转TTL模块插到电脑，打开串口调试助手就可以发送指令。这是不可以的。切记！！！</p>
 <h2 id="四、单片机串口程序"><a href="#四、单片机串口程序" class="headerlink" title="四、单片机串口程序"></a>四、单片机串口程序</h2><p>这里以51单片机为例，蓝牙串口的程序最重要的就是配置串口定时器，这里将定时器相关的代码贴出来，大家最好按照这种方法配置，经过多次建议程序稳定。</p>
 <h3 id="串口初始化"><a href="#串口初始化" class="headerlink" title="串口初始化"></a>串口初始化</h3><pre class=" language-c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">Usartinit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token comment" spellcheck="true">//初始化</span>
@@ -749,7 +749,7 @@ void Usart() interrupt 4 //一旦有数据接入，串行口中断触发
    flag=1;              //将标志位置1  这个是方便在主程序中查询判断是否已经接收到数据
 }</code></pre>
 <p>以上是单片机的程序，由于51单片机只有一对RXD和TXD引脚，故先将程序下载到单片机后再将蓝牙模块的四个引脚接到单片机的RXD和TXD引脚，以后每次下载程序是都要这样操作，但不要嫌麻烦。</p>
-<h2 id="五、手机端操作"><a href="#五、手机端操作" class="headerlink" title="五、手机端操作"></a>五、手机端操作</h2><p>在安卓手机的应用商店搜索“蓝牙调试助手”，我的应用商店下载的是“蓝牙调试器”<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://mmbiz.qpic.cn/mmbiz_jpg/92RTr9Ut6fHzl0Zr8dmbTz7wYsWRERXKkcyNcu1ExBJXicuM8l1BqGVhVALAMnazyYOvlktqDlXsxSyibvOhick2Q/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt=""><br>在没有连接成功蓝牙时，蓝牙上面的红灯一直在闪烁，当连接成功后，红灯停止闪烁，每发送一条指令，电脑的串口调试助手就会收到手机端发送的消息。</p>
+<h2 id="五、手机端操作"><a href="#五、手机端操作" class="headerlink" title="五、手机端操作"></a>五、手机端操作</h2><p>在安卓手机的应用商店搜索“蓝牙调试助手”，我的应用商店下载的是“蓝牙调试器”<br><img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/loading3.gif" data-original="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la4.png" alt=""><br>在没有连接成功蓝牙时，蓝牙上面的红灯一直在闪烁，当连接成功后，红灯停止闪烁，每发送一条指令，电脑的串口调试助手就会收到手机端发送的消息。</p>
 <p>现在，你会用蓝牙模块了吗？</p>
 
             </div>
@@ -989,7 +989,7 @@ void Usart() interrupt 4 //一旦有数据接入，串行口中断触发
                 <a href="/posts/6590.html">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/cover11.png" class="responsive-img" alt="项目分享|小师弟手把手教你用蓝牙模块">
+                        <img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/la5.jpg" class="responsive-img" alt="项目分享|小师弟手把手教你用蓝牙模块">
                         
                         <span class="card-title">项目分享|小师弟手把手教你用蓝牙模块</span>
                     </div>
@@ -1038,7 +1038,7 @@ void Usart() interrupt 4 //一旦有数据接入，串行口中断触发
                 <a href="/posts/5d98.html">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/cdn@1.2/cover/cover8.jpg" class="responsive-img" alt="谷歌浏览器chrome必装的几款神级实用插件">
+                        <img src="https://cdn.jsdelivr.net/gh/xiaoshidi-hub/PicGO/picture/chrome8.jpg" class="responsive-img" alt="谷歌浏览器chrome必装的几款神级实用插件">
                         
                         <span class="card-title">谷歌浏览器chrome必装的几款神级实用插件</span>
                     </div>
@@ -1439,7 +1439,7 @@ $(function () {
         })
     </script>
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1581692055806')
+  navigator.serviceWorker.register('/sw.js?t=1581694656074')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
